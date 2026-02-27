@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="es" class="antialiased bg-black">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ALERTA CRÍTICA: Desintegración Laboral</title>
+
+  <!-- Fonts: Bebas Neue for extreme panic impact, JetBrains Mono for raw data -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;700;800&family=Inter:wght@400;600;800&display=swap"
+    rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    :root {
+      --blood-red: #da0000;
+      --abyss: #030000;
+      --toxic-yellow: #ffb800;
+      --bone-white: #e5e5e5;
+      --slate-dark: #111111;
+
+      --font-panic: 'Bebas Neue', display;
+      --font-raw: 'JetBrains Mono', monospace;
+      --font-human: 'Inter', sans-serif;
+    }
+
+    body {
+      background-color: var(--abyss);
+      color: var(--bone-white);
+      overflow-x: hidden;
+      font-family: var(--font-human);
+      background-image: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255, 0, 0, 0.03) 2px, rgba(255, 0, 0, 0.03) 4px);
+    }
+
+    ::selection {
+      background: var(--blood-red);
+      color: white;
+    }
+
+    /* VIGNETTE MACABRA & CRTL ROOM ALARM */
+    .alarm-vignette {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 100;
+      box-shadow: inset 0 0 200px rgba(218, 0, 0, 0.15);
+      animation: heart-beat-alarm 2.5s infinite;
+    }
+
+    @keyframes heart-beat-alarm {
+
+      0%,
+      100% {
+        box-shadow: inset 0 0 150px rgba(0, 0, 0, 0.9);
+        background: rgba(218, 0, 0, 0);
+      }
+
+      10% {
+        box-shadow: inset 0 0 250px rgba(218, 0, 0, 0.3);
+        background: rgba(218, 0, 0, 0.02);
+      }
+
+      25% {
+        box-shadow: inset 0 0 150px rgba(0, 0, 0, 0.9);
+        background: rgba(218, 0, 0, 0);
+      }
+    }
+
+    .noise-overlay {
+      position: fixed;
+      inset: -50%;
+      width: 200%;
+      height: 200%;
+      pointer-events: none;
+      z-index: 99;
+      opacity: 0.04;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+      animation: static-noise 0.2s infinite;
+    }
+
+    @keyframes static-noise {
+      0% {
+        transform: translate(0, 0);
+      }
+
+      10% {
+        transform: translate(-2%, -2%);
+      }
+
+      20% {
+        transform: translate(2%, 2%);
+      }
+
+      30% {
+        transform: translate(-2%, 2%);
+      }
+
+      40% {
+        transform: translate(2%, -2%);
+      }
+
+      50% {
+        transform: translate(0, 0);
+      }
+    }
+
+    /* PANIC TYPOGRAPHY */
+    .title-panic {
+      font-family: var(--font-panic);
+      font-size: clamp(4rem, 12vw, 10rem);
+      line-height: 0.85;
+      text-transform: uppercase;
+      color: white;
+      position: relative;
+    }
+
+    .glitch-text {
+      animation: brutal-glitch 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+    }
+
+    @keyframes brutal-glitch {
+      0% {
+        transform: translate(0) skew(0deg);
+        text-shadow: 0 0 0 rgba(218, 0, 0, 0);
+        opacity: 0;
+      }
+
+      20% {
+        transform: translate(-10px, 5px) skew(10deg);
+        text-shadow: 10px 0 0 rgba(218, 0, 0, 0.8), -10px 0 0 rgba(0, 255, 255, 0.8);
+        opacity: 1;
+      }
+
+      40% {
+        transform: translate(10px, -5px) skew(-10deg);
+        text-shadow: 10px 0 0 rgba(218, 0, 0, 0.8), -10px 0 0 rgba(0, 255, 255, 0.8);
+      }
+
+      60% {
+        transform: translate(-5px, 2px) skew(5deg);
+        color: var(--toxic-yellow);
+      }
+
+      80% {
+        transform: translate(5px, -2px) skew(-5deg);
+        color: white;
+      }
+
+      100% {
+        transform: translate(0) skew(0deg);
+        text-shadow: 5px 5px 0px rgba(218, 0, 0, 0.4);
+      }
+    }
+
+    /* Efecto Maquina de Escribir para el subtitulo */
+    .typewriter-text {
+      display: inline-block;
+      overflow: hidden;
+      /* Ensures the content is not revealed until the animation */
+      white-space: nowrap;
+      /* Keeps the content on a single line */
+      animation: typing 2.5s steps(80, end) forwards;
+      clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
+    }
+
+    @keyframes typing {
+      from {
+        clip-path: inset(0 100% 0 0);
+      }
+
+      to {
+        clip-path: inset(0 0 0 0);
+      }
+    }
+
+    /* SACA LA PALABRA "COLAPSO" DEL FONDO */
+    .bg-text-massive {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: var(--font-panic);
+      font-size: 40vw;
+      color: rgba(218, 0, 0, 0.04);
+      white-space: nowrap;
+      pointer-events: none;
+      z-index: -1;
+      line-height: 1;
+    }
+
+    /* SEVERITY BADGES */
+    .defcon-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--blood-red);
+      color: white;
+      font-family: var(--font-raw);
+      font-weight: 800;
+      padding: 8px 20px;
+      font-size: 14px;
+      letter-spacing: 0.2em;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 0 30px rgba(218, 0, 0, 0.6);
+      animation: strobe 1.5s infinite;
+    }
+
+    @keyframes strobe {
+      50% {
+        opacity: 0.6;
+        box-shadow: 0 0 10px rgba(218, 0, 0, 0.2);
+      }
+    }
+
+    /* RAW DATA BLOCKS */
+    .data-card {
+      background: var(--slate-dark);
+      border-top: 4px solid var(--blood-red);
+      padding: 2.5rem;
+      position: relative;
+    }
+
+    .data-card::after {
+      content: 'CONFIDENTIAL / SRT_RAW_DATA';
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      font-family: var(--font-raw);
+      font-size: 10px;
+      color: rgba(255, 255, 255, 0.1);
+      letter-spacing: 2px;
+    }
+
+    .metric-value {
+      font-family: var(--font-panic);
+      font-size: clamp(5rem, 10vw, 8rem);
+      color: var(--blood-red);
+      line-height: 1;
+      text-shadow: 4px 4px 0px rgba(255, 0, 0, 0.2);
+    }
+
+    .metric-symbol {
+      font-family: var(--font-raw);
+      font-size: 4rem;
+      position: relative;
+      top: -10px;
+    }
+
+    .metric-label {
+      font-family: var(--font-raw);
+      color: var(--toxic-yellow);
+      letter-spacing: 0.1em;
+      font-weight: 700;
+      font-size: 1.1rem;
+      margin-top: 0.5rem;
+    }
+
+    /* TERMINAL CASCADING TEXT */
+    .terminal-feed {
+      font-family: var(--font-raw);
+      background: #000;
+      border: 1px solid rgba(218, 0, 0, 0.3);
+      padding: 1.5rem;
+      font-size: 13px;
+      color: #ff3333;
+      height: 250px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    .terminal-feed::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .terminal-feed::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.8);
+    }
+
+    .terminal-feed::-webkit-scrollbar-thumb {
+      background: rgba(218, 0, 0, 0.5);
+    }
+
+    .terminal-feed::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 10px;
+      background: linear-gradient(to bottom, #000, transparent);
+      z-index: 10;
+    }
+
+    .terminal-line {
+      display: block;
+      margin-bottom: 8px;
+      opacity: 0;
+    }
+
+    /* THE BRUTAL IMPACT GRID */
+    .brutal-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5px;
+      background: rgba(255, 255, 255, 0.05);
+      /* creates raw 1px borders between items */
+    }
+
+    .brutal-item {
+      background: #080808;
+      padding: 2.5rem 2rem;
+      display: grid;
+      grid-template-columns: 60px 1fr;
+      gap: 2rem;
+      align-items: start;
+      transition: background 0.2s, transform 0.1s;
+      opacity: 0;
+      position: relative;
+    }
+
+    /* Staggered snap-in animation for list */
+    .snap-in {
+      animation: snap-power 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+
+    @keyframes snap-power {
+      0% {
+        opacity: 0;
+        transform: scale(0.95) translateX(-50px);
+        filter: brightness(0) blur(10px);
+      }
+
+      70% {
+        opacity: 1;
+        transform: scale(1.02) translateX(10px);
+        filter: brightness(2) blur(0px);
+      }
+
+      100% {
+        opacity: 1;
+        transform: scale(1) translateX(0);
+        filter: brightness(1) blur(0px);
+      }
+    }
+
+    .brutal-item:hover {
+      background: #110000;
+      transform: translateX(10px);
+    }
+
+    .brutal-num {
+      font-family: var(--font-panic);
+      color: var(--blood-red);
+      font-size: 3.5rem;
+      line-height: 0.8;
+      opacity: 0.5;
+    }
+
+    .brutal-title {
+      font-family: var(--font-human);
+      font-weight: 800;
+      font-size: 1.5rem;
+      color: white;
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: -0.5px;
+    }
+
+    .brutal-text {
+      color: #999;
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+
+    /* END CRASH PULSE */
+    .final-pulse {
+      position: absolute;
+      right: -8px;
+      bottom: -8px;
+      width: 16px;
+      height: 16px;
+      background-color: var(--blood-red);
+      border-radius: 50%;
+      opacity: 0;
+      box-shadow: 0 0 20px 10px rgba(218, 0, 0, 0.8);
+    }
+
+    .final-pulse.active {
+      animation: brutal-pulse 1s ease-out infinite;
+    }
+
+    @keyframes brutal-pulse {
+      0% {
+        transform: scale(0.5);
+        opacity: 1;
+        box-shadow: 0 0 0 0 rgba(218, 0, 0, 0.8);
+      }
+
+      50% {
+        opacity: 0.8;
+      }
+
+      100% {
+        transform: scale(3.5);
+        opacity: 0;
+        box-shadow: 0 0 0 40px rgba(218, 0, 0, 0);
+      }
+    }
+
+    .severe-gauge-container {
+      position: relative;
+      width: 100%;
+      height: 250px;
+      margin-top: 3rem;
+      overflow: visible;
+      border-bottom: 1px solid rgba(218, 0, 0, 0.4);
+    }
+
+    #crash-fill {
+      fill: url(#blood-grad);
+      opacity: 0.8;
+      transition: opacity 0.5s;
+    }
+
+    #crash-line {
+      fill: none;
+      stroke: var(--blood-red);
+      stroke-width: 4;
+      vector-effect: non-scaling-stroke;
+      filter: drop-shadow(0px -4px 8px rgba(218, 0, 0, 0.6));
+    }
+
+
+
+    .x-axis {
+      display: flex;
+      justify-content: space-between;
+      color: #666;
+      font-family: var(--font-raw);
+      font-size: 12px;
+      margin-top: 10px;
+    }
+
+    /* REVEAL ANIMATIONS */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(50px);
+    }
+
+    .visible {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- FX Layers -->
+  <div class="alarm-vignette"></div>
+  <div class="noise-overlay"></div>
+  <div class="bg-text-massive">COLAPSO</div>
+
+  <main class="relative z-10 max-w-7xl mx-auto px-4 py-8 md:py-16">
+
+    <!-- HEADER -->
+    <header class="mb-16 md:mb-24 fade-up">
+      <div class="defcon-badge mb-8">
+        <span class="w-3 h-3 bg-red-900 rounded-full animate-pulse"></span>
+        STATUS: RIESGO SOCIAL INMINENTE
+      </div>
+
+      <h1 class="title-panic mb-6 glitch-text" style="animation-delay: 0.3s;">
+        Derrumbe del <br />
+        <span class="text-[--blood-red] animate-[pulse_1s_infinite]">Empleo formal</span>
+      </h1>
+
+      <div class="max-w-3xl border-l-4 border-[--toxic-yellow] pl-6 py-2">
+        <p class="text-xl md:text-2xl text-gray-300 font-light typewriter-text" style="animation-delay: 1.2s;">
+          La sangría en el sistema registrado condena a cientos de miles de hogares a la precariedad absoluta.
+        </p>
+        <p class="font-raw text-[--bone-white] opacity-60 text-sm">
+          FUENTE: SUPERINTENDENCIA DE RIESGOS DEL TRABAJO (SRT) / CORTE: NOV 2023 ⭢ NOV 2025
+        </p>
+      </div>
+    </header>
+
+    <!-- METRICS GRID -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+
+      <!-- IMPACTO BRUTO -->
+      <section class="data-card fade-up delay-100">
+        <div class="flex justify-between items-start mb-6">
+          <h2 class="font-raw text-[--bone-white] opacity-50 uppercase tracking-widest text-xs">Pérdida Neta Puestos
+            Registrados</h2>
+          <div class="text-[--toxic-yellow] font-raw text-xs animate-pulse">LIVE DATA</div>
+        </div>
+
+        <div class="flex items-baseline mb-2">
+          <span class="metric-symbol">-</span>
+          <span id="counter" class="metric-value font-panic tracking-tight" data-target="290602">0</span>
+        </div>
+
+        <div class="metric-label">FAMILIAS DIRECTAMENTE AFECTADAS</div>
+
+        <!-- El Gráfico de la Desesperación -->
+        <div class="severe-gauge-container group">
+          <svg width="100%" height="100%" preserveAspectRatio="none" viewBox="0 0 100 100">
+            <defs>
+              <linearGradient id="blood-grad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="rgba(218,0,0,0.8)" />
+                <stop offset="100%" stop-color="rgba(218,0,0,0.1)" />
+              </linearGradient>
+            </defs>
+            <polygon id="crash-fill" points="" />
+            <polyline id="crash-line" points="" />
+          </svg>
+          <div id="impact-pulse" class="final-pulse"></div>
+        </div>
+        <div class="x-axis">
+          <span>T0: Nov 2023 (Estable)</span>
+          <span class="text-[--blood-red] font-bold tracking-widest">T1: Nov 2025 (Fondo)</span>
+        </div>
+      </section>
+
+      <!-- TERMINAL & STATUS DATA -->
+      <section class="flex flex-col gap-8 fade-up delay-200">
+
+        <!-- Terminal Simulator -->
+        <div>
+          <div class="terminal-feed" id="terminal">
+            <!-- JS will populate logs here -->
+          </div>
+
+          <!-- Fuentes Oficiales -->
+          <div
+            class="mt-4 px-4 py-3 bg-[rgba(218,0,0,0.05)] border border-[rgba(218,0,0,0.2)] text-[11px] font-raw text-gray-400">
+            <span class="text-[--toxic-yellow] uppercase tracking-wider block mb-2 font-bold">» Directorio de
+              Fuentes:</span>
+            <ul class="space-y-2">
+              <li>
+                <span class="text-white opacity-50">SIPA:</span>
+                <a href="https://www.argentina.gob.ar/trabajo/estadisticas/sipa" target="_blank"
+                  class="hover:text-white hover:underline transition-colors">[Sist. Integrado Previsional]</a>
+              </li>
+              <li>
+                <span class="text-white opacity-50">SRT:</span>
+                <a href="https://www.srt.gob.ar/estadisticas/" target="_blank"
+                  class="hover:text-white hover:underline transition-colors">[Superintendencia de Riesgos]</a>
+              </li>
+              <li>
+                <span class="text-white opacity-50">CEPA:</span>
+                <a href="https://centrocepa.com.ar/informes" target="_blank"
+                  class="hover:text-white hover:underline transition-colors">[Análisis de Dinámica Formato]</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Raw Stats Panel -->
+        <div class="data-card !border-t-[--toxic-yellow] flex-1 flex flex-col justify-center">
+          <h2 class="font-raw text-[--bone-white] opacity-50 uppercase tracking-widest text-xs mb-8">Volumen
+            Sobreviviente (Reporte 11/2025)</h2>
+
+          <ul class="space-y-6">
+            <li class="flex justify-between border-b border-white/10 pb-2">
+              <span class="font-raw text-sm text-gray-400">Total Trabajadores Cubiertos</span>
+              <span class="font-panic text-3xl">10.169.441</span>
+            </li>
+            <li class="flex justify-between border-b border-white/10 pb-2">
+              <span class="font-raw text-sm text-gray-400">Unidades Productivas en Pie</span>
+              <span class="font-panic text-3xl">9.566.573</span>
+            </li>
+            <li class="flex justify-between border-b border-white/10 pb-2">
+              <span class="font-raw text-sm text-gray-400">Personal Casas Particulares</span>
+              <span class="font-panic text-3xl">602.868</span>
+            </li>
+          </ul>
+        </div>
+
+      </section>
+
+    </div>
+
+    <!-- EL DIAGNÓSTICO CRUDO (List) -->
+    <div class="mb-24 fade-up delay-300 brutal-container">
+      <div
+        class="bg-[--blood-red] text-white font-panic text-3xl px-6 py-3 uppercase tracking-wider inline-block mb-0 animate-[pulse_2s_infinite]">
+        Diagnóstico de Daño Colateral
+      </div>
+
+      <div class="brutal-list border-t border-[--blood-red]">
+
+        <article class="brutal-item group">
+          <div class="brutal-num">01</div>
+          <div>
+            <h3 class="brutal-title group-hover:text-[--toxic-yellow] transition-colors">Extinción del Blindaje Familiar
+            </h3>
+            <p class="brutal-text">
+              La desconexión del sistema registrado anula automáticamente la cobertura de obra social y el cobro de
+              aguinaldos. Ante emergencias médicas o de alquiler, <strong>los hogares no tienen más salvavidas que la
+                deuda usuraria</strong> o la liquidación de sus escasos bienes.
+            </p>
+          </div>
+        </article>
+
+        <article class="brutal-item group">
+          <div class="brutal-num">02</div>
+          <div>
+            <h3 class="brutal-title group-hover:text-[--toxic-yellow] transition-colors">Caída Abismal a la Informalidad
+            </h3>
+            <p class="brutal-text">
+              El mercado no reabsorbe en blanco. Casi 300 mil personas son empujadas a trabajar "en negro". <strong>Sin
+                paritarias, vacaciones pagadas, ni indemnización</strong>, sus salarios son literalmente pulverizados
+              día a día por la inflación sin que puedan defenderse.
+            </p>
+          </div>
+        </article>
+
+        <article class="brutal-item group">
+          <div class="brutal-num">03</div>
+          <div>
+            <h3 class="brutal-title group-hover:text-[--toxic-yellow] transition-colors">Estrangulamiento del Comercio
+              Local (Pymes)</h3>
+            <p class="brutal-text">
+              El dinero desaparece de las calles del barrio. Cuando miles de familias cortan drásticamente su consumo
+              (comida, ropa, salidas), el almacenero y la pyme no facturan. <strong>Esto desencadena la quiebra en
+                cadena de pequeños negocios</strong>, generando aún MÁS desempleados.
+            </p>
+          </div>
+        </article>
+
+        <article class="brutal-item group">
+          <div class="brutal-num">04</div>
+          <div>
+            <h3 class="brutal-title group-hover:text-[--toxic-yellow] transition-colors">Bomba de Tiempo Jubilatoria
+            </h3>
+            <p class="brutal-text">
+              El sistema se sostiene con aportes de trabajadores activos. <strong>Un déficit de esta escala bloquea la
+                inyección de miles de millones de pesos al Estado</strong>, quebrando silenciosamente la caja de ANSeS y
+              poniendo en jaque el pago actual de los abuelos.
+            </p>
+          </div>
+        </article>
+
+      </div>
+    </div>
+
+    <!-- PURE METADATA FOOTER -->
+    <footer
+      class="border-t-4 border-white/10 pt-8 pb-16 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 fade-up">
+      <div class="font-raw text-xs text-gray-500 uppercase leading-relaxed">
+        <span class="text-white block mb-1">END OF REPORT // CONFIDENTIAL M-14</span>
+        EXTRACTED FROM: Superintendencia de Riesgos del Trabajo (SRT)<br />
+        METHOD: Delta neto (nov-2023 vs nov-2025)
+      </div>
+
+      <button onclick="window.print()"
+        class="bg-white text-black font-panic text-xl px-12 py-4 hover:bg-[--blood-red] hover:text-white transition-colors duration-300">
+        [ EXPORTAR EVIDENCIA ]
+      </button>
+    </footer>
+
+  </main>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+
+      // 1. Terminal Panic Logging (OFFICIAL DATA SIPA/SRT)
+      const terminal = document.getElementById('terminal');
+      const messages = [
+        "ALERTA: Recibiendo actualización SIPA (Sistema Integrado Previsional Argentino)...",
+        "> Analizando series desestacionalizadas (Nov 2023 - Nov 2025)...",
+        "[ERROR CRÍTICO] Sector Construcción reporta baja de 76.292 puestos formales.",
+        "> Cruzando datos provinciales...",
+        "WARNING: Colapso industrial confirmado (-55.941 empleos manufactureros).",
+        "[SISTEMA] Transporte y Almacenamiento: Contracción del 13.3% de empleadores.",
+        "> Verificando jurisdicciones en estado de emergencia...",
+        "IMPACTO SEVERO: Buenos Aires (-32.300), Santa Cruz (-7.7%), Salta (-4.7%).",
+        "[STATUS FINAL] Fuga de aportes supera los umbrales históricos de retención."
+      ];
+
+      let msgIndex = 0;
+      const typeSpeed = 40;
+
+      function logNextMessage() {
+        if (msgIndex >= messages.length) return;
+
+        const line = document.createElement('span');
+        line.className = 'terminal-line';
+        terminal.appendChild(line);
+        terminal.scrollTop = terminal.scrollHeight;
+
+        let charIndex = 0;
+        const text = messages[msgIndex];
+
+        function typeChar() {
+          if (charIndex < text.length) {
+            line.innerHTML += text.charAt(charIndex);
+            charIndex++;
+            terminal.scrollTop = terminal.scrollHeight; // Force scroll per char for long lines
+            setTimeout(typeChar, typeSpeed);
+          } else {
+            line.style.opacity = '1';
+            msgIndex++;
+            setTimeout(logNextMessage, Math.random() * 800 + 400); // random pause between lines
+          }
+        }
+        typeChar();
+      }
+
+      // Start terminal after 0.2 sec instead of 1 sec to show action immediately
+      setTimeout(logNextMessage, 200);
+
+
+      // 2. Intersection Observer for Fade-Up Entry
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+
+            // Add snap-in to children list items if it's the brutal list container
+            if (entry.target.classList.contains('brutal-container')) {
+              const items = entry.target.querySelectorAll('.brutal-item');
+              items.forEach((item, index) => {
+                item.style.animationDelay = `${(index * 0.15)}s`;
+                item.classList.add('snap-in');
+              });
+            }
+
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+
+      document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+
+      // 3. Jarring Brutal Value Counter + SVG Chart Synchronizer
+      const counterEl = document.getElementById('counter');
+      const targetVal = parseInt(counterEl.getAttribute('data-target'), 10);
+
+      const crashFill = document.getElementById('crash-fill');
+      const crashLine = document.getElementById('crash-line');
+
+      // Coordinate mapping for the data points
+      const xs = [0, 20, 40, 60, 80, 100];
+      const startYs = [10, 12, 10, 15, 12, 15]; // "Stable" phase
+      const endYs = [10, 40, 70, 85, 95, 100];  // "Crash" phase
+
+      // Initialize with stable phase
+      const startPolyRaw = startYs.map((y, i) => `${xs[i]},${y}`).join(' ');
+      crashLine.setAttribute('points', startPolyRaw);
+      crashFill.setAttribute('points', startPolyRaw + ' 100,100 0,100');
+
+      // Delay to sync completely with user attention capturing
+      setTimeout(() => {
+        let startTime = null;
+        const duration = 1200; // Accelerated panic drop
+
+        counterEl.parentElement.classList.add('text-[--toxic-yellow]');
+        setTimeout(() => counterEl.parentElement.classList.remove('text-[--toxic-yellow]'), 150);
+
+        const updateNumberAndGraph = (time) => {
+          if (!startTime) startTime = time;
+          const progress = Math.min((time - startTime) / duration, 1);
+
+          // Easing function: starts very slow, slashes down brutally at the end
+          const easeProgress = progress === 0 ? 0 : Math.pow(2, 10 * progress - 10);
+
+          // 1. Update Counter
+          const currentVal = Math.floor(easeProgress * targetVal);
+          counterEl.innerText = currentVal.toLocaleString('es-AR');
+
+          // 2. Update SVG Graph coordinates dynamically
+          const currentYs = startYs.map((startY, i) => startY + (endYs[i] - startY) * easeProgress);
+          const pointsRaw = currentYs.map((y, i) => `${xs[i]},${y}`).join(' ');
+
+          crashLine.setAttribute('points', pointsRaw);
+          crashFill.setAttribute('points', pointsRaw + ' 100,100 0,100');
+
+          if (progress < 1) requestAnimationFrame(updateNumberAndGraph);
+          else {
+            // Final slam impact effects + Activate Pulse
+            counterEl.style.transform = "scale(1.1)";
+            counterEl.style.color = "var(--blood-red)";
+            counterEl.parentElement.style.animation = "strobe 0.1s 3";
+            setTimeout(() => counterEl.style.transform = "scale(1)", 150);
+
+            // Trigger brutal bloody pulse exactly at the crash impact
+            document.getElementById('impact-pulse').classList.add('active');
+          }
+        };
+        requestAnimationFrame(updateNumberAndGraph);
+      }, 1800); // 1.8s delay aligns completely with the audio/visual suspense phase
+
+    });
+  </script>
+</body>
+
+</html>
