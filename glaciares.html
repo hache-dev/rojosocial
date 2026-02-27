@@ -1,0 +1,641 @@
+﻿<!doctype html>
+<html lang="es-AR">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>REPORTE CLÍNICO SOCIAL - LEY DE GLACIARES</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,700;1,400&family=Jura:wght@300;500;700;800&display=swap"
+    rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-clinical: #050a0f;
+      --panel-bg: rgba(10, 20, 30, 0.75);
+      --text-main: #e2e8f0;
+      --text-muted: #64748b;
+      --accent-medical: #00f2ff;
+      /* Cyan neo */
+      --alert-critical: #ff2a2a;
+      /* Rojo alerta */
+      --warn: #ffb800;
+      /* Amarillo radiación */
+      --grid-line: rgba(0, 242, 255, 0.05);
+
+      --font-data: 'IBM Plex Mono', monospace;
+      --font-display: 'Jura', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-clinical);
+      color: var(--text-main);
+      font-family: var(--font-display);
+      margin: 0;
+      background-image:
+        linear-gradient(var(--grid-line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+      background-size: 30px 30px;
+      animation: scanGrid 30s linear infinite;
+      overflow-x: hidden;
+    }
+
+    @keyframes scanGrid {
+      0% {
+        background-position: 0 0;
+      }
+
+      100% {
+        background-position: 30px 30px;
+      }
+    }
+
+    h1,
+    h2,
+    h3,
+    h4 {
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .data-font {
+      font-family: var(--font-data);
+    }
+
+    /* CONTENEDOR PRINCIPAL TIPO MONITOR */
+    .clinical-screen {
+      background: rgba(5, 10, 15, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(0, 242, 255, 0.15);
+      box-shadow: 0 0 50px rgba(0, 10, 20, 0.9), inset 0 0 30px rgba(0, 242, 255, 0.06);
+      position: relative;
+    }
+
+    .clinical-screen::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(rgba(0, 242, 255, 0.02) 50%, rgba(0, 0, 0, 0.1) 50%);
+      background-size: 100% 4px;
+      pointer-events: none;
+      z-index: 50;
+    }
+
+    /* PANELES DE DATOS */
+    .panel-box {
+      background: var(--panel-bg);
+      border: 1px solid rgba(0, 242, 255, 0.1);
+      border-left: 3px solid var(--accent-medical);
+      backdrop-filter: blur(5px);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .panel-box:hover {
+      background: rgba(15, 30, 45, 0.85);
+      border-left-color: var(--alert-critical);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0, 242, 255, 0.1);
+    }
+
+    /* BADGES DE RIESGO */
+    .risk-badge {
+      display: inline-block;
+      padding: 0.25rem 0.6rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      font-family: var(--font-data);
+      letter-spacing: 1px;
+      border: 1px solid transparent;
+      margin-right: 0.4rem;
+      margin-top: 0.4rem;
+      text-transform: uppercase;
+    }
+
+    .risk-critical {
+      background: rgba(255, 42, 42, 0.15);
+      color: #ff5555;
+      border-color: var(--alert-critical);
+      box-shadow: 0 0 10px rgba(255, 42, 42, 0.2);
+    }
+
+    .risk-high {
+      background: rgba(255, 184, 0, 0.1);
+      color: var(--warn);
+      border-color: var(--warn);
+    }
+
+    .risk-mid {
+      background: rgba(0, 242, 255, 0.1);
+      color: var(--accent-medical);
+      border-color: rgba(0, 242, 255, 0.4);
+    }
+
+    .risk-base {
+      background: rgba(255, 255, 255, 0.05);
+      color: #aaa;
+      border-color: #555;
+    }
+
+    /* ESTADO ALERTA ROJA */
+    .alert-banner {
+      background: rgba(255, 42, 42, 0.08);
+      border: 1px solid rgba(255, 42, 42, 0.3);
+      border-left: 8px solid var(--alert-critical);
+      color: #ffcccc;
+      box-shadow: inset 0 0 20px rgba(255, 42, 42, 0.1);
+      animation: red-pulse 2s infinite;
+    }
+
+    @keyframes red-pulse {
+
+      0%,
+      100% {
+        box-shadow: inset 0 0 20px rgba(255, 42, 42, 0.1);
+      }
+
+      50% {
+        box-shadow: inset 0 0 40px rgba(255, 42, 42, 0.25);
+      }
+    }
+
+    .ok-banner {
+      background: rgba(0, 242, 255, 0.05);
+      border: 1px solid rgba(0, 242, 255, 0.2);
+      border-left: 8px solid var(--accent-medical);
+      color: #e0ffff;
+    }
+
+    /* TABLAS CLÍNICAS */
+    .clinical-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: var(--font-data);
+      font-size: 0.85rem;
+    }
+
+    .clinical-table th,
+    .clinical-table td {
+      padding: 12px;
+      border-bottom: 1px solid rgba(0, 242, 255, 0.1);
+      text-align: left;
+    }
+
+    .clinical-table th {
+      color: var(--accent-medical);
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      background: rgba(0, 242, 255, 0.05);
+      text-transform: uppercase;
+    }
+
+    .clinical-table tbody tr {
+      transition: background 0.2s;
+    }
+
+    .clinical-table tbody tr:hover {
+      background: rgba(0, 242, 255, 0.03);
+    }
+
+    /* ANIMACIONES REVELACIÓN */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .status-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background-color: var(--alert-critical);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--alert-critical);
+      animation: pulse-dot 1s infinite alternate;
+      margin-right: 8px;
+    }
+
+    @keyframes pulse-dot {
+      to {
+        box-shadow: 0 0 3px rgba(255, 42, 42, 0.4);
+        opacity: 0.6;
+      }
+    }
+
+    .type-anim {
+      display: inline-block;
+      overflow: hidden;
+      white-space: nowrap;
+      border-right: 2px solid var(--accent-medical);
+      animation: typing 1.5s steps(30, end) forwards, blink 0.75s step-end infinite;
+      max-width: fit-content;
+    }
+
+    @keyframes typing {
+      from {
+        width: 0;
+      }
+
+      to {
+        width: 100%;
+      }
+    }
+
+    @keyframes blink {
+      50% {
+        border-color: transparent
+      }
+    }
+  </style>
+</head>
+
+<body class="min-h-screen py-8 px-4 md:px-6 flex justify-center items-start">
+
+  <main class="clinical-screen w-full max-w-6xl p-6 md:p-10 rounded-lg shadow-2xl">
+
+    <!-- HEADER DEL REPORTE -->
+    <header class="border-b border-gray-800 pb-8 mb-10 flex flex-col md:flex-row justify-between items-start gap-6">
+      <div class="flex-1">
+        <div class="flex items-center mb-3">
+          <span class="status-dot"></span>
+          <span class="font-bold tracking-widest text-sm text-[var(--alert-critical)] type-anim">
+            ALERTA: REVISIÓN DE PROTOCOLO AMBIENTAL
+          </span>
+        </div>
+        <h1 class="text-4xl md:text-5xl font-extrabold text-white leading-tight mb-2">
+          INFORME DE LABORATORIO<br>
+          <span class="text-[var(--accent-medical)] drop-shadow-[0_0_8px_rgba(0,242,255,0.4)]">SOCIOAMBIENTAL</span>
+        </h1>
+        <p class="text-gray-400 max-w-2xl text-sm leading-relaxed">
+          Evaluación documental sobre el riesgo de regresión normativa de las modificaciones propuestas a la Ley de
+          Glaciares (Ley 26.639).
+        </p>
+      </div>
+
+      <!-- METADATA GRID -->
+      <div
+        class="text-right data-font text-[11px] md:text-sm text-gray-400 border-l border-[var(--accent-medical)] pl-5 min-w-[300px]">
+        <div class="space-y-2">
+          <p class="flex justify-between border-b border-gray-800/50 pb-1">
+            <span>Paciente / Caso:</span> <span class="text-white">Sistema Glaciar Nacional</span>
+          </p>
+          <p class="flex justify-between border-b border-gray-800/50 pb-1">
+            <span>Motivo Estudio:</span> <span class="text-[var(--warn)]">Regresión Normativa</span>
+          </p>
+          <p class="flex justify-between border-b border-gray-800/50 pb-1">
+            <span>Fecha Emisión:</span> <span class="text-white">26/02/2026</span>
+          </p>
+          <p class="flex justify-between border-b border-gray-800/50 pb-1">
+            <span>Muestras Analizadas:</span> <span class="text-white">5 Documentos</span>
+          </p>
+          <p class="flex justify-between mt-2 pt-1">
+            <span>Estado:</span> <span
+              class="bg-[var(--accent-medical)] text-black font-bold px-2 py-0.5 animate-pulse">AUTORIZADO /
+              FINAL</span>
+          </p>
+        </div>
+      </div>
+    </header>
+
+    <!-- ALERTA DE RIESGO -->
+    <div class="alert-banner p-5 mb-10 fade-up">
+      <h3 class="font-bold text-lg mb-2 flex items-center gap-2">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z">
+          </path>
+        </svg>
+        ALERTA DE IMPACTO SOCIAL EXTREMO
+      </h3>
+      <p class="text-sm data-font opacity-90 leading-relaxed">
+        El análisis integrado ubica el escenario pos-reforma en nivel de riesgo <strong class="text-white">[ALTO /
+          CRÍTICO]</strong> para la disponibilidad de agua dulce, sanidad ambiental y supervivencia de las economías
+        regionales.
+      </p>
+    </div>
+
+    <!-- RESUMEN EJECUTIVO (KPIs) -->
+    <section class="mb-12 fade-up">
+      <h2 class="text-sm text-[var(--accent-medical)] tracking-widest border-b border-gray-800 pb-2 mb-6">
+        [ 01. SÍNTESIS VITAL ]
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+        <p class="text-gray-300 text-sm leading-relaxed">
+          Los cinco documentos revisados convergen en una conclusión consistente: la reforma propuesta <strong>reduce la
+            protección efectiva</strong> que hoy garantiza la Ley 26.639, incrementa la discrecionalidad administrativa
+          provincial en zonas altamente sensibles y debilita el anclaje técnico-científico del sistema de inventario
+          oficial.
+        </p>
+        <p class="text-gray-300 text-sm leading-relaxed">
+          En términos de salud socioambiental, esto implica una mayor exposición al estrés hídrico, una fragilidad
+          acelerada de ecosistemas estratégicos y una alta probabilidad de conflictividad judicial. No se observa
+          evidencia científica robusta que justifique bajar el estándar de protección vigente.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="panel-box p-4 text-center">
+          <div
+            class="text-4xl font-bold font-data text-[var(--accent-medical)] drop-shadow-[0_0_10px_rgba(0,242,255,0.4)] mb-1">
+            36%</div>
+          <div class="text-[10px] uppercase text-gray-500 font-bold">Territorio de cuencas con Aporte Deshielo</div>
+        </div>
+        <div class="panel-box p-4 text-center">
+          <div class="text-4xl font-bold font-data text-white mb-1">7.5M+</div>
+          <div class="text-[10px] uppercase text-gray-500 font-bold">Habitantes directamente Vinculados</div>
+        </div>
+        <div class="panel-box p-4 text-center">
+          <div class="text-4xl font-bold font-data text-white mb-1">16K</div>
+          <div class="text-[10px] uppercase text-gray-500 font-bold">Cuerpos glaciares Inventariados</div>
+        </div>
+        <div class="panel-box p-4 text-center border-l border-red-900 bg-red-900/10">
+          <div
+            class="text-4xl font-bold font-data text-[var(--alert-critical)] mb-1 drop-shadow-[0_0_10px_rgba(255,42,42,0.6)]">
+            -8%</div>
+          <div class="text-[10px] uppercase text-gray-500 font-bold">Caída de masa en Andes Desérticos (10 Años)</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROTOCOLO DE MUESTRAS -->
+    <section class="mb-12 fade-up">
+      <h2 class="text-sm text-[var(--accent-medical)] tracking-widest border-b border-gray-800 pb-2 mb-6">
+        [ 02. LABORATORIO DOCUMENTAL ]
+      </h2>
+      <div class="overflow-x-auto bg-black border border-gray-800/80">
+        <table class="clinical-table">
+          <thead>
+            <tr>
+              <th width="8%">ID</th>
+              <th width="30%">Archivo Fuente</th>
+              <th width="50%">Rol en el Diagnóstico</th>
+              <th width="12%">Status</th>
+            </tr>
+          </thead>
+          <tbody class="text-gray-300">
+            <tr>
+              <td class="text-[var(--accent-medical)] font-bold">Mº A</td>
+              <td><code>infoleg.pdf</code></td>
+              <td>Línea basal vital: Ley 26.639 Textos vigentes.</td>
+              <td><span class="text-green-500 font-bold">PROCESADO</span></td>
+            </tr>
+            <tr>
+              <td class="text-[var(--accent-medical)] font-bold">Mº B</td>
+              <td><code>PE161_25PL.pdf</code></td>
+              <td>Proyecto de reforma (Láser extract OCR).</td>
+              <td><span class="text-green-500 font-bold">PROCESADO</span></td>
+            </tr>
+            <tr>
+              <td class="text-[var(--accent-medical)] font-bold">Mº C</td>
+              <td><code>c2e6470c...glaciares.pdf</code></td>
+              <td>Biopsia jurídica y observaciones articulares críticas.</td>
+              <td><span class="text-green-500 font-bold">PROCESADO</span></td>
+            </tr>
+            <tr>
+              <td class="text-[var(--accent-medical)] font-bold">Mº D</td>
+              <td><code>informe-biodiversidad.pdf</code></td>
+              <td>Respuesta sistémica, riesgo ecológico y matriz hídrica.</td>
+              <td><span class="text-green-500 font-bold">PROCESADO</span></td>
+            </tr>
+            <tr>
+              <td class="text-[var(--accent-medical)] font-bold">Mº E</td>
+              <td><code>informe_final_AD_2024.pdf</code></td>
+              <td>Monitoreo IANIGLA-CONICET (Andes Desérticos).</td>
+              <td><span class="text-green-500 font-bold">PROCESADO</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- HALLAZGOS Y PATOLOGÍAS -->
+    <section class="mb-12">
+      <h2 class="text-sm text-[var(--accent-medical)] tracking-widest border-b border-gray-800 pb-2 mb-6">
+        [ 03. AUTOPSIA DEL PROYECTO - HALLAZGOS ]
+      </h2>
+
+      <div class="space-y-6">
+
+        <article class="panel-box p-5 fade-up flex flex-col md:flex-row gap-6">
+          <div class="md:w-1/4">
+            <h3 class="text-[var(--accent-medical)] font-bold text-lg mb-1">MUESTRA A</h3>
+            <p class="data-font text-xs text-gray-500">Estado Orgánico Base</p>
+          </div>
+          <div class="md:w-3/4">
+            <p class="text-sm text-gray-300 leading-relaxed mb-3">La Ley 26.639 establece un <strong>piso nacional
+                uniforme</strong>: protege glaciares y ambiente periglacial como reservas hídricas estratégicas. Ordena
+              inventario riguroso y define prohibiciones expresas sin matices de interpretación local sobre 'grados de
+              daño'.</p>
+            <div>
+              <span class="risk-badge risk-mid">Presupuesto nacional</span>
+              <span class="risk-badge risk-mid">Protección estricta</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="panel-box p-5 fade-up !border-l-[var(--alert-critical)] flex flex-col md:flex-row gap-6">
+          <div class="md:w-1/4">
+            <h3 class="text-[var(--alert-critical)] font-bold text-lg mb-1 drop-shadow-[0_0_5px_rgba(255,42,42,0.8)]">
+              MUESTRA B</h3>
+            <p class="data-font text-xs text-gray-500">Mutación Normativa</p>
+          </div>
+          <div class="md:w-3/4">
+            <p class="text-sm text-gray-300 leading-relaxed mb-3">Desplazamiento peligroso del eje protector desde
+              reglas nacionales a concesiones discrecionales provinciales. <strong>Síntomas graves:</strong></p>
+            <ul class="list-disc pl-5 text-sm text-gray-400 mb-3 space-y-1 marker:text-[var(--alert-critical)]">
+              <li>La autoridad local define qué áreas cumplen "función hídrica" comprobable.</li>
+              <li>Habilitación administrativa para borrar geoformas del inventario oficial.</li>
+              <li>Prohibiciones ambientales subordinadas a un falso concepto de "alteración relevante".</li>
+            </ul>
+            <div>
+              <span class="risk-badge risk-critical">Regresión Crítica</span>
+              <span class="risk-badge risk-high">Alta Discrecionalidad</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="panel-box p-5 fade-up flex flex-col md:flex-row gap-6">
+          <div class="md:w-1/4">
+            <h3 class="text-[var(--warn)] font-bold text-lg mb-1">MUESTRA C & D</h3>
+            <p class="data-font text-xs text-gray-500">Pronóstico Sistémico</p>
+          </div>
+          <div class="md:w-3/4">
+            <p class="text-sm text-gray-300 leading-relaxed mb-3">El cambio no es aclaratorio, es retroactivo e
+              inconstitucional (Violación Art 41 CN). La reducción de cobertura sobre el ambiente periglacial anula la
+              resiliencia hídrica, secando ecosistemas, humedales y empujando a la extinción a la biodiversidad andina.
+            </p>
+            <div>
+              <span class="risk-badge risk-high">Certeza de Litigios</span>
+              <span class="risk-badge risk-critical">Daño Hídrico Letal</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="panel-box p-5 fade-up flex flex-col md:flex-row gap-6">
+          <div class="md:w-1/4">
+            <h3 class="text-white font-bold text-lg mb-1">MUESTRA E</h3>
+            <p class="data-font text-xs text-[var(--accent-medical)]">Biopsia de Campo 2024</p>
+          </div>
+          <div class="md:w-3/4">
+            <p class="text-sm text-gray-300 leading-relaxed mb-3">Los datos duros son irrefutables: pérdida acelerada de
+              cuerpos de hielo estables y achicamiento de neves. La recesión glaciar de los Andes Desérticos obliga a
+              una intervención de emergencia, no a aflojar las barreras legales.</p>
+            <div>
+              <span class="risk-badge risk-critical">Pérdida de Masa</span>
+              <span class="risk-badge risk-base">SIPA Oficializado</span>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- MATRIZ DE RIESGO DE IMPACTO -->
+    <section class="mb-12 fade-up">
+      <h2 class="text-sm text-[var(--accent-medical)] tracking-widest border-b border-gray-800 pb-2 mb-6">
+        [ 04. VECTOR DE IMPACTO COMUNITARIO ]
+      </h2>
+      <div class="overflow-hidden border border-gray-800 rounded-sm">
+        <table class="clinical-table w-full">
+          <thead>
+            <tr>
+              <th width="30%">Sistema Afectado</th>
+              <th width="50%">Proyección Fisiopatológica</th>
+              <th width="20%" class="text-center">Threat Level</th>
+            </tr>
+          </thead>
+          <tbody class="text-gray-300 bg-[#080d14]">
+            <tr>
+              <td class="font-bold border-r border-gray-800/60 p-4">Reservas Domiciliarias de Agua</td>
+              <td class="p-4 text-sm opacity-90">Mayor margen empresario/provincial para destruir zonas geohídricas
+                clave.</td>
+              <td class="text-center p-4 bg-red-900/10"><span
+                  class="risk-badge risk-critical ml-0 !mt-0 w-full text-center">CRÍTICO</span></td>
+            </tr>
+            <tr>
+              <td class="font-bold border-r border-gray-800/60 p-4">Salud Urbana y Regional</td>
+              <td class="p-4 text-sm opacity-90">Inminente intoxicación o secado de cuencas de consumo popular y
+                productivo.</td>
+              <td class="text-center p-4"><span class="risk-badge risk-high ml-0 !mt-0 w-full text-center">ALTO /
+                  SEVERO</span></td>
+            </tr>
+            <tr>
+              <td class="font-bold border-r border-gray-800/60 p-4">Ecosistema Especie/Hábitat</td>
+              <td class="p-4 text-sm opacity-90">Anulación de zonas de amortiguación andinas bajo cambio climático
+                veloz.</td>
+              <td class="text-center p-4 bg-red-900/10"><span
+                  class="risk-badge risk-critical ml-0 !mt-0 w-full text-center">CRÍTICO</span></td>
+            </tr>
+            <tr>
+              <td class="font-bold border-r border-gray-800/60 p-4">Economías de Base</td>
+              <td class="p-4 text-sm opacity-90">Ganancia corta para mineras vs. muerte asfixiada del agro local y
+                turismo.</td>
+              <td class="text-center p-4"><span class="risk-badge risk-high ml-0 !mt-0 w-full text-center">ALTO /
+                  SEVERO</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- CONCLUSIÓN FINAL -->
+    <section class="mb-6 fade-up">
+      <h2 class="text-sm text-[var(--accent-medical)] tracking-widest border-b border-gray-800 pb-2 mb-6">
+        [ 05. PRESCRIPCIÓN Y FALLO FINAL ]
+      </h2>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="p-8 border border-[var(--alert-critical)] bg-[rgba(255,42,42,0.05)] relative overflow-hidden group">
+          <div class="absolute -right-10 -top-10 opacity-5 group-hover:opacity-10 transition duration-500 scale-150">
+            <svg viewBox="0 0 24 24" class="w-48 h-48 text-[var(--alert-critical)]" stroke="currentColor"
+              stroke-width="2" fill="none">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z">
+              </path>
+            </svg>
+          </div>
+          <h3 class="text-[var(--alert-critical)] font-bold uppercase mb-4 flex items-center gap-2">
+            <span class="status-dot"></span> DIAGNÓSTICO NEGATIVO
+          </h3>
+          <p class="text-gray-300 font-medium leading-relaxed">
+            Se desaconseja terminalmente aprobar la reforma del PE en el Congreso Nacional. El análisis estructural
+            comprueba una regresión jurídica y operativa del sistema de defensa ambiental, habilitando una destrucción a
+            escalas irrecuperables de las nacientes de nuestras cuencas.
+          </p>
+        </div>
+
+        <div class="p-8 border border-[var(--accent-medical)] bg-[rgba(0,242,255,0.03)] relative">
+          <h3 class="text-[var(--accent-medical)] font-bold uppercase mb-4 tracking-widest">
+            TRATAMIENTO RECOMENDADO
+          </h3>
+          <p class="text-gray-300 font-medium leading-relaxed">
+            Preservar absolutamente la inmunidad del actual <strong>piso nacional preventivo (Ley 26.639)</strong>.
+            Acelerar partidas para que IANIGLA optimice los ritmos del Inventario Glaciar usando tecnología satelital
+            autónoma, y criminalizar administrativamente los derrames mineros comprobados sobre matriz periglaciar.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER TERMINAL -->
+    <footer class="pt-8 border-t border-gray-800 mt-12 flex flex-col md:flex-row justify-between items-center gap-6"
+      id="footer-print">
+      <div class="data-font text-[11px] text-gray-500">
+        <p class="mb-1 text-[var(--warn)]">» EXTRACCIÓN DE REPOSITORIO DE DATOS CONFIDENCIALES</p>
+        <p>Documento preparado exclusivo para auditoría legislativa y comisiones ambientales.</p>
+        <p class="mt-2 text-gray-600">// FIN DE DESPACHO INTERNO // TRÁNSITO ENCRIPTADO</p>
+      </div>
+
+      <button onclick="shareEvidence()"
+        class="bg-black hover:bg-[var(--accent-medical)] text-[var(--accent-medical)] hover:text-black font-bold uppercase tracking-widest px-8 py-3 border border-[var(--accent-medical)] transition-all duration-300 shadow-[0_0_15px_rgba(0,242,255,0.2)] hover:shadow-[0_0_25px_rgba(0,242,255,0.6)] font-data text-sm">
+        [ COMPARTIR EXPEDIENTE ]
+      </button>
+    </footer>
+
+  </main>
+
+  <script>
+    function shareEvidence() {
+      const url = window.location.href; // Puede ser el path relativo también
+      if (navigator.share) {
+        navigator.share({
+          title: 'REPORTE CLÍNICO - Riesgo Socioambiental Glaciares',
+          text: 'Evaluación del riesgo de la reforma a la Ley de Glaciares.',
+          url: url
+        }).catch(console.error);
+      } else {
+        navigator.clipboard.writeText(url).then(() => {
+          alert('ID de Expediente copiado a terminal del portapapeles.');
+        }).catch(console.error);
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+
+      document.querySelectorAll('.fade-up').forEach((el, index) => {
+        el.style.transitionDelay = `${index * 0.1}s`;
+        observer.observe(el);
+      });
+    });
+  </script>
+</body>
+
+</html>
