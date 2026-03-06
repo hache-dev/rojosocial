@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Análisis Documental - Ley 27.802</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&family=Inter:wght@400;600;900&display=swap');
+
+        :root {
+            --bg: #030303;
+            --bg-alt: #0a0a0a;
+            --text: #f4f4f5;
+            --muted: #8a8a93;
+            --accent: #ff2a2a;
+            /* Brutal Red */
+            --accent-hover: #ff4d4d;
+            --border: rgba(255, 255, 255, 0.15);
+            --font-display: 'Inter', sans-serif;
+            --font-body: 'Space Grotesk', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            background: var(--bg);
+        }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Utilitarios */
+        .container {
+            width: 100%;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .text-accent {
+            color: var(--accent);
+        }
+
+        .text-muted {
+            color: var(--muted);
+        }
+
+        /* Ruido de fondo documental */
+        .noise-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.03;
+            background: url('data:image/svg+xml;utf8,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E');
+        }
+
+        /* Animaciones al Scroll */
+        .reveal {
+            opacity: 0;
+            transform: translateY(60px);
+            transition: all 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .delay-1 {
+            transition-delay: 0.1s;
+        }
+
+        .delay-2 {
+            transition-delay: 0.2s;
+        }
+
+        .delay-3 {
+            transition-delay: 0.3s;
+        }
+
+        /* Cinta / Marquee Documental */
+        .marquee {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: var(--accent);
+            color: #000;
+            padding: 0.6rem 0;
+            font-weight: 900;
+            font-family: var(--font-display);
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.2em;
+            white-space: nowrap;
+            overflow: hidden;
+            z-index: 100;
+            border-bottom: 2px solid #000;
+            box-shadow: 0 4px 25px rgba(255, 42, 42, 0.6);
+            display: flex;
+        }
+
+        .marquee-content {
+            display: flex;
+            animation: alert-scroll 15s linear infinite;
+        }
+
+        .marquee span {
+            padding-right: 2rem;
+        }
+
+        @keyframes alert-scroll {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding-top: 6rem;
+            position: relative;
+            border-bottom: 1px solid var(--border);
+            background: radial-gradient(circle at 70% 30%, rgba(255, 42, 42, 0.12) 0%, transparent 60%);
+            overflow: hidden;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -50px;
+            right: -50px;
+            width: 400px;
+            height: 400px;
+            background: rgba(255, 42, 42, 0.05);
+            filter: blur(80px);
+            z-index: -1;
+            animation: pulse-glow 8s infinite alternate;
+        }
+
+        @keyframes pulse-glow {
+            0% {
+                opacity: 0.5;
+                transform: scale(0.8);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1.2);
+            }
+        }
+
+        .hero-label {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 0.85rem;
+            letter-spacing: 0.1em;
+            color: var(--accent);
+            text-transform: uppercase;
+            display: inline-block;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--accent);
+            padding: 0.4rem 0.8rem;
+            background: rgba(255, 42, 42, 0.05);
+            position: relative;
+            align-self: flex-start;
+        }
+
+        .hero-label::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--accent);
+            animation: blink 1s infinite step-end;
+        }
+
+        @keyframes blink {
+            50% {
+                opacity: 0;
+            }
+        }
+
+        .hero h1 {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 7vw, 8.5rem);
+            font-weight: 900;
+            line-height: 0.95;
+            text-transform: uppercase;
+            letter-spacing: -0.04em;
+            margin-bottom: 2rem;
+            max-width: 1100px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .word-breaker {
+            position: relative;
+            display: inline-block;
+            white-space: normal;
+        }
+
+        @media (min-width: 768px) {
+            .word-breaker {
+                white-space: nowrap;
+            }
+        }
+
+        .hero h1 .word-base {
+            background: var(--accent);
+            color: #000;
+            padding: 0 0.5rem;
+            display: inline-block;
+            transform: skewX(-5deg);
+            position: relative;
+            box-shadow: 6px 6px 0 rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            animation: shatter-base 4s infinite;
+        }
+
+        @media (min-width: 768px) {
+            .hero h1 .word-base {
+                padding: 0 1rem;
+                box-shadow: 8px 8px 0 rgba(255, 255, 255, 0.1);
+            }
+        }
+
+        .hero h1:hover .word-base {
+            transform: skewX(-10deg) scale(1.05);
+            box-shadow: 12px 12px 0 rgba(255, 42, 42, 0.4);
+            animation: glitch-anim 0.2s infinite;
+        }
+
+        .word-base::before,
+        .word-base::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--accent);
+            color: #000;
+            padding: 0 1rem;
+            box-sizing: border-box;
+            overflow: hidden;
+            pointer-events: none;
+            opacity: 0;
+            z-index: 2;
+        }
+
+        /* Elemento Superior roto */
+        .word-base::before {
+            clip-path: polygon(0 0, 100% 0, 100% 45%, 75% 60%, 55% 35%, 40% 75%, 25% 50%, 0 65%);
+            animation: shatter-top 4s infinite;
+        }
+
+        /* Elemento Inferior roto */
+        .word-base::after {
+            clip-path: polygon(0 65%, 25% 50%, 40% 75%, 55% 35%, 75% 60%, 100% 45%, 100% 100%, 0 100%);
+            animation: shatter-bot 4s infinite;
+        }
+
+        .lightning-bolt {
+            position: absolute;
+            top: -120%;
+            left: 45%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 280%;
+            background: #fff;
+            clip-path: polygon(60% 0%, 25% 45%, 55% 45%, 0% 100%, 75% 40%, 40% 40%, 90% 0%);
+            animation: bolt-strike 4s infinite;
+            opacity: 0;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        @keyframes bolt-strike {
+
+            0%,
+            94% {
+                opacity: 0;
+            }
+
+            95% {
+                opacity: 1;
+                background: #fff;
+                filter: drop-shadow(0 0 20px #fff) drop-shadow(0 0 40px #fff);
+            }
+
+            96% {
+                opacity: 0;
+            }
+
+            97% {
+                opacity: 1;
+                background: var(--accent);
+                filter: drop-shadow(0 0 20px var(--accent));
+            }
+
+            98%,
+            100% {
+                opacity: 0;
+            }
+        }
+
+        @keyframes shatter-base {
+
+            0%,
+            94% {
+                color: #000;
+                background: var(--accent);
+                box-shadow: 8px 8px 0 rgba(255, 255, 255, 0.1);
+            }
+
+            95% {
+                color: transparent;
+                background: transparent;
+                box-shadow: none;
+                filter: contrast(100);
+            }
+
+            99% {
+                color: transparent;
+                background: transparent;
+                box-shadow: none;
+            }
+
+            100% {
+                color: #000;
+                background: var(--accent);
+                box-shadow: 8px 8px 0 rgba(255, 255, 255, 0.1);
+            }
+        }
+
+        @keyframes shatter-top {
+
+            0%,
+            94% {
+                opacity: 0;
+                transform: translate(0, 0) rotate(0);
+                filter: brightness(1);
+            }
+
+            95% {
+                opacity: 1;
+                transform: translate(-15px, -20px) rotate(-6deg) skewX(10deg);
+                filter: brightness(2) drop-shadow(0 0 20px #fff);
+            }
+
+            97% {
+                opacity: 1;
+                transform: translate(-10px, -10px) rotate(-3deg);
+                filter: brightness(1.2);
+            }
+
+            99% {
+                opacity: 1;
+                transform: translate(-5px, -5px) rotate(-1deg);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translate(0, 0);
+            }
+        }
+
+        /* La parte de abajo cae dramáticamente y desaparece */
+        @keyframes shatter-bot {
+
+            0%,
+            93% {
+                opacity: 0;
+                transform: translateY(0) rotate(0);
+                filter: brightness(1);
+            }
+
+            94% {
+                opacity: 1;
+                transform: translate(15px, 20px) rotate(8deg) skewX(-10deg);
+                filter: brightness(0.5);
+            }
+
+            95% {
+                opacity: 1;
+                transform: translate(25px, 80px) rotate(15deg) scale(0.9);
+                filter: brightness(0.2);
+            }
+
+            97% {
+                opacity: 0.5;
+                transform: translate(35px, 300px) rotate(35deg) scale(0.6);
+                filter: brightness(0);
+            }
+
+            98% {
+                opacity: 0;
+                transform: translate(40px, 500px) rotate(45deg) scale(0.5);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translate(0, 0);
+            }
+        }
+
+        .hero p {
+            font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+            max-width: 750px;
+            color: var(--muted);
+            border-left: 4px solid var(--accent);
+            padding-left: 1.5rem;
+            margin-bottom: 3rem;
+            position: relative;
+            z-index: 100;
+        }
+
+        .meta-data {
+            display: flex;
+            gap: 3rem;
+            font-family: var(--font-display);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-top: 1px solid var(--border);
+            padding-top: 2rem;
+            margin-top: auto;
+            padding-bottom: 2rem;
+            position: relative;
+            z-index: 100;
+        }
+
+        .meta-block strong {
+            color: #fff;
+            display: block;
+            font-size: 1.2rem;
+        }
+
+        .meta-block span {
+            color: var(--muted);
+        }
+
+        /* Análisis Documental (Grilla) */
+        .analysis-section {
+            padding: 8rem 0;
+            background: var(--bg-alt);
+        }
+
+        .section-header {
+            margin-bottom: 5rem;
+        }
+
+        .section-header h2 {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 5vw, 5rem);
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            font-size: 1.2rem;
+            color: var(--muted);
+            max-width: 600px;
+        }
+
+        .dossier-grid {
+            display: grid;
+            gap: 4rem;
+        }
+
+        .dossier-grid.collapsed .dossier-item:nth-child(n+5) {
+            display: none;
+        }
+
+        .dossier-item {
+            display: grid;
+            grid-template-columns: 1fr;
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.02);
+            position: relative;
+        }
+
+        .load-more-container {
+            text-align: center;
+            margin-top: 5rem;
+        }
+
+        .brutalist-btn {
+            background: transparent;
+            color: var(--accent);
+            border: 2px solid var(--accent);
+            padding: 1.2rem 2.5rem;
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 0.1em;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .brutalist-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--accent);
+            transition: all 0.3s ease;
+            z-index: -1;
+        }
+
+        .brutalist-btn:hover {
+            color: #000;
+            transform: translate(-4px, -4px);
+            box-shadow: 6px 6px 0 rgba(255, 42, 42, 0.3);
+            border-color: var(--accent);
+        }
+
+        .brutalist-btn:hover::before {
+            left: 0;
+        }
+
+        @media (min-width: 900px) {
+            .dossier-item {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .dossier-item::before {
+            content: attr(data-article);
+            position: absolute;
+            top: -1.2rem;
+            left: 2rem;
+            background: var(--accent);
+            color: #000;
+            font-family: var(--font-display);
+            font-weight: 900;
+            padding: 0.2rem 1rem;
+            font-size: 1rem;
+            transform: skewX(-10deg);
+            box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.5);
+        }
+
+        .law-text {
+            padding: 4rem 3rem 3rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        @media (min-width: 900px) {
+            .law-text {
+                border-bottom: none;
+                border-right: 1px solid var(--border);
+            }
+        }
+
+        .law-text h3 {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            color: #fff;
+            transition: color 0.3s ease;
+        }
+
+        .dossier-item:hover .law-text h3 {
+            color: var(--accent);
+            text-shadow: 2px 2px 0px rgba(255, 42, 42, 0.4), -2px -2px 0px rgba(0, 255, 255, 0.2);
+            animation: glitch-anim 0.3s infinite alternate;
+        }
+
+        @keyframes glitch-anim {
+            0% {
+                transform: skewX(0deg);
+            }
+
+            5% {
+                transform: skewX(2deg);
+            }
+
+            10% {
+                transform: skewX(-2deg);
+            }
+
+            15% {
+                transform: skewX(0deg);
+            }
+
+            100% {
+                transform: skewX(0deg);
+            }
+        }
+
+        .law-text blockquote {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.95rem;
+            color: var(--muted);
+            line-height: 1.5;
+            padding-left: 1.5rem;
+            border-left: 2px dashed var(--muted);
+        }
+
+        .law-text blockquote mark {
+            background: rgba(255, 42, 42, 0.2);
+            color: #fff;
+        }
+
+        .impact-text {
+            padding: 4rem 3rem 3rem;
+            background: rgba(255, 42, 42, 0.03);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border-left: 4px solid transparent;
+            transition: all 0.4s ease;
+        }
+
+        .dossier-item:hover .impact-text {
+            border-color: var(--accent);
+            background: rgba(255, 42, 42, 0.08);
+            box-shadow: inset 0 0 50px rgba(255, 42, 42, 0.05);
+        }
+
+        .impact-badge {
+            font-family: var(--font-display);
+            font-weight: 900;
+            text-transform: uppercase;
+            color: #000;
+            background: var(--accent);
+            padding: 0.3rem 1rem;
+            margin-bottom: 1rem;
+            letter-spacing: 0.15em;
+            font-size: 0.85rem;
+            align-self: flex-start;
+            opacity: 0;
+            transform: scale(2) rotate(-10deg);
+        }
+
+        .dossier-item.active .impact-badge {
+            animation: stamp-effect 0.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+            animation-delay: 0.4s;
+        }
+
+        @keyframes stamp-effect {
+            0% {
+                transform: scale(3) rotate(-20deg);
+                opacity: 0;
+            }
+
+            50% {
+                transform: scale(0.9) rotate(2deg);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        .impact-text p {
+            font-size: 1.15rem;
+            font-weight: 400;
+            color: #f4f4f5;
+        }
+
+        .impact-text strong {
+            color: var(--accent);
+        }
+
+        /* Conclusión Fuerte */
+        .conclusion {
+            padding: 10rem 0;
+            text-align: center;
+            background: var(--accent);
+            color: #000;
+            border-top: 4px solid #fff;
+        }
+
+        .conclusion h2 {
+            font-family: var(--font-display);
+            font-size: clamp(3rem, 6vw, 6rem);
+            font-weight: 900;
+            line-height: 0.95;
+            text-transform: uppercase;
+            letter-spacing: -0.03em;
+            max-width: 1000px;
+            margin: 0 auto 2rem;
+        }
+
+        .conclusion p {
+            font-size: 1.5rem;
+            font-weight: 700;
+            max-width: 700px;
+            margin: 0 auto;
+            color: rgba(0, 0, 0, 0.8);
+        }
+
+        /* Footer Documental */
+        footer {
+            padding: 3rem 0;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            font-family: var(--font-display);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--muted);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Elemento Decorativo: Ruido de TV Analógica / Documental -->
+    <div class="noise-overlay"></div>
+
+    <!-- Marquee Tape Superior -->
+    <div class="marquee">
+        <div class="marquee-content">
+            <!-- Dos copias completas para un scroll continuo sin saltos -->
+            <span>BOLETÍN OFICIAL - LEY 27.802 - ANÁLISIS DOCUMENTAL DE IMPACTO SOCIAL CÓDIGO 339128 /// </span>
+            <span>RESTITUCIÓN DE LEGISLACIÓN - EXPEDIENTE CLASIFICADO /// </span>
+            <span>PELIGRO DE PRECARIZACIÓN LABORAL EXTREMA /// </span>
+
+            <span>BOLETÍN OFICIAL - LEY 27.802 - ANÁLISIS DOCUMENTAL DE IMPACTO SOCIAL CÓDIGO 339128 /// </span>
+            <span>RESTITUCIÓN DE LEGISLACIÓN - EXPEDIENTE CLASIFICADO /// </span>
+            <span>PELIGRO DE PRECARIZACIÓN LABORAL EXTREMA /// </span>
+        </div>
+    </div>
+
+    <header class="hero container">
+        <div class="hero-label reveal">Expediente Público #339128</div>
+        <h1 class="reveal delay-1">
+            La letra chica de la <br>
+            <span class="word-breaker">
+                <span class="word-base" data-text="modernización">modernización</span>
+                <span class="lightning-bolt"></span>
+            </span>
+            laboral
+        </h1>
+        <p class="reveal delay-2">
+            Análisis documental de la Ley 27.802. Una disección de los artículos clave que modifican estructuralmente la
+            Ley de Contrato de Trabajo, trasladando el riesgo económico hacia el eslabón más débil de la matriz
+            productiva: el trabajador.
+        </p>
+
+        <div class="meta-data reveal delay-3">
+            <div class="meta-block">
+                <span>Documento Fuente</span>
+                <strong>B.O. Aviso 339128</strong>
+            </div>
+            <div class="meta-block">
+                <span>Objeto de Análisis</span>
+                <strong>Ley de Contrato de Trabajo</strong>
+            </div>
+            <div class="meta-block" style="margin-left: auto; text-align: right;">
+                <span>Estado</span>
+                <strong class="text-accent">VIGENTE</strong>
+            </div>
+        </div>
+    </header>
+
+    <section class="analysis-section">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2>El Archivo<br>Técnico</h2>
+                <p>De un lado, lo que establece el texto legal sancionado por el Congreso. Del otro, la traducción
+                    literal de su impacto en la vida económica y los derechos del trabajador.</p>
+            </div>
+
+            <div class="dossier-grid">
+
+                <!-- ITEM 1 -->
+                <article class="dossier-item reveal" data-article="ARTÍCULO 23">
+                    <div class="law-text">
+                        <h3>Presunción de la relación laboral</h3>
+                        <blockquote>
+                            "La presunción contenida en el presente artículo no será de aplicación cuando mediaren
+                            contrataciones de obras o de servicios profesionales... y se emitan los recibos o
+                            facturas... o <mark>el pago se realice conforme los sistemas bancarios</mark>. Dicha
+                            ausencia de presunción se extenderá a todos los efectos, inclusive a la seguridad social."
+                        </blockquote>
+                    </div>
+                    <div class="impact-text">
+                        <span class="impact-badge">Impacto Directo</span>
+                        <p><strong>Legalización del fraude laboral estructural.</strong> Obliga al trabajador a soportar
+                            la carga probatoria total de que no es un "proveedor independiente". Si estás bancarizado y
+                            facturas como monotributista a una sola empresa de lunes a viernes, la ley asume que eres
+                            independiente, quitándote indemnización, aguinaldo y paritarias reales.</p>
+                    </div>
+                </article>
+
+                <!-- ITEM 2 -->
+                <article class="dossier-item reveal" data-article="ARTÍCULO 30">
+                    <div class="law-text">
+                        <h3>Tercerización y Solidaridad</h3>
+                        <blockquote>
+                            "Quienes... contraten o subcontraten... deberán exigir a sus contratistas... el número de
+                            CUIL, la constancia de pago a los Subsistemas de la Seguridad Social... <mark>El
+                                cumplimiento del control... exime de toda responsabilidad al principal.</mark>"
+                        </blockquote>
+                    </div>
+                    <div class="impact-text">
+                        <span class="impact-badge">Impacto Directo</span>
+                        <p><strong>Ruptura de la cadena de responsabilidad.</strong> Promueve la fragmentación de las
+                            grandes empresas mediante agencias tercerizadas. La empresa matriz se "lava las manos"
+                            frente a despidos, accidentes o fraudes con solo exigir papeles a la subcontratista,
+                            blindando su patrimonio y dejando al empleado a merced de agencias satélite insolventes.</p>
+                    </div>
+                </article>
+
+                <!-- ITEM 3 -->
+                <article class="dossier-item reveal" data-article="ARTÍCULO 103 BIS">
+                    <div class="law-text">
+                        <h3>Beneficios Sociales</h3>
+                        <blockquote>
+                            "...se consideran beneficios sociales las siguientes prestaciones: (...) Los servicios de
+                            comedor... La provisión de ropa... Los reintegros de gastos de guardería... <mark>En ningún
+                                caso el pago de estos beneficios será considerado salario</mark> ni corresponderá el
+                            pago de aportes ni contribuciones."
+                        </blockquote>
+                    </div>
+                    <div class="impact-text">
+                        <span class="impact-badge">Impacto Directo</span>
+                        <p><strong>Abaratamiento y licuación del salario real.</strong> Permite que las empresas paguen
+                            una parte sustancial del ingreso del empleado bajo "conceptos no remunerativos". Al no
+                            considerarse sueldo, <strong>esa porción no cuenta para el aguinaldo, no genera aportes para
+                                la jubilación futura, ni forma parte del cálculo indemnizatorio</strong> en un despido.
+                        </p>
+                    </div>
+                </article>
+
+                <!-- ITEM 4 -->
+                <article class="dossier-item reveal" data-article="ARTÍCULO 245">
+                    <div class="law-text">
+                        <h3>Despido e Indemnización</h3>
+                        <blockquote>
+                            "<mark>Dicha base salarial no podrá exceder el equivalente a tres (3) veces</mark> el
+                            importe del salario mensual promedio... Mediante Convenio Colectivo de Trabajo, las partes
+                            podrán sustituir el presente régimen indemnizatorio por un <mark>fondo o sistema de cese
+                                laboral</mark> cuyo costo estará a cargo del empleador."
+                        </blockquote>
+                    </div>
+                    <div class="impact-text">
+                        <span class="impact-badge">Impacto Directo</span>
+                        <p><strong>El despido como una simple cuota bancaria.</strong> Al imponer topes estrictos y
+                            habilitar el reemplazo de la indemnización histórica por un fondo de cese (donde el
+                            empleador aporta mensualmente una póliza o fondo), se elimina el "castigo" disuasorio del
+                            despido arbitrario. Despedir ya no es una contingencia cara; se transforma en un gasto
+                            operativo estándar y mensualizado predecible.</p>
+                    </div>
+                </article>
+
+                <!-- ITEM 5 -->
+                <article class="dossier-item reveal" data-article="ARTÍCULO 92 QUATER">
+                    <div class="law-text">
+                        <h3>Trabajadores Colaboradores</h3>
+                        <blockquote>
+                            "El trabajador independiente podrá contar con <mark>hasta otros tres (3) trabajadores
+                                independientes</mark> para llevar adelante un emprendimiento productivo y podrá acogerse
+                            a un
+                            régimen especial unificado... <mark>no existirá relación de dependencia</mark> entre ellos."
+                        </blockquote>
+                    </div>
+                    <div class="impact-text">
+                        <span class="impact-badge">Impacto Directo</span>
+                        <p><strong>Formalización del fraude de la falsa autonomía.</strong> Se legaliza la posibilidad
+                            de que
+                            una persona tenga bajo su cargo a otros tres trabajadores sin reconocerles ningún derecho
+                            laboral
+                            (vacaciones, aguinaldo, indemnización, ART). Es una relación de dependencia encubierta
+                            avalada por la ley,
+                            creando un submundo de trabajadores de segunda categoría bajo el disfraz de "colaboradores".
+                        </p>
+                    </div>
+                </article>
+
+                <!-- ITEM 6 -->
+                <article class="dossier-item reveal" data-article="LEY 26.727 ART 12">
+                    <div class="law-text">
+                        <h3>Desresponsabilización Agraria</h3>
+                        <blockquote>
+                            "Aquellos propietarios que den en arrendamiento maquinarias, equipamiento o las tierras de
+                            su titularidad, <mark>en ningún caso serán considerados responsables solidarios</mark> por
+                            las
+                            obligaciones emergentes de la relación laboral entre los trabajadores y aquellos que los
+                            hubieran
+                            registrado..."
+                        </blockquote>
+                    </div>
+                    <div class="impact-text">
+                        <span class="impact-badge">Impacto Directo</span>
+                        <p><strong>Inmunidad patrimonial en el campo.</strong> Si un trabajador rural sufre un
+                            accidente, no
+                            le pagan su salario o está en negro, el dueño real de la tierra o de la maquinaria no tiene
+                            ninguna
+                            responsabilidad. El trabajador solo puede reclamarle a la persona o empresa fantasma que lo
+                            contrató,
+                            la cual suele ser insolvente, dejándolo sin resguardo económico real.</p>
+                    </div>
+                </article>
+
+                <!-- ITEM 7 -->
+                <article class="dossier-item reveal" data-article="LEY 25.877 ART 24">
+                    <div class="law-text">
+                        <h3>Restricción al Derecho de Huelga</h3>
+                        <blockquote>
+                            "En lo que respecta a la prestación de servicios mínimos, en el caso de los servicios
+                            esenciales, <mark>en ningún caso se podrá negociar o imponer a las partes una cobertura
+                                menor al
+                                setenta y cinco por ciento (75%)</mark> de la prestación normal... actividades de
+                            importancia
+                            trascendental... <mark>cobertura menor al cincuenta por ciento (50%).</mark>"
+                        </blockquote>
+                    </div>
+                    <div class="impact-text">
+                        <span class="impact-badge">Impacto Directo</span>
+                        <p><strong>Neutralización de la protesta laboral.</strong> Al exigir que el 75% o el 50% de la
+                            actividad funcione normalmente durante una huelga (ampliando desmesuradamente qué se
+                            considera
+                            "esencial" o "trascendental", como la siderurgia o el agro), se vacía de poder y eficacia la
+                            principal herramienta de reclamo histórico de los trabajadores frente a abusos o caída
+                            salarial.</p>
+                    </div>
+                </article>
+
+                <!-- ITEM 8 -->
+                <article class="dossier-item reveal" data-article="ARTÍCULO 29 BIS">
+                    <div class="law-text">
+                        <h3>Impedimento de Representación</h3>
+                        <blockquote>
+                            "Atento a las características temporarias propias de la eventualidad, <mark>el trabajador
+                                eventual no podrá ser candidato y/o designado en cargo gremial alguno</mark> vinculado a
+                            la empresa usuaria que implique la aplicación de la tutela..."
+                        </blockquote>
+                    </div>
+                    <div class="impact-text">
+                        <span class="impact-badge">Impacto Directo</span>
+                        <p><strong>Prohibición de defensa colectiva.</strong> Se le prohíbe explícitamente a los
+                            trabajadores eventuales o tercerizados organizarse y elegir delegados propios que los
+                            representen frente a la empresa real para la que trabajan. Se consolida a este grupo como
+                            trabajadores sin voz y sin protección sindical directa.</p>
+                    </div>
+                </article>
+
+                <!-- ITEM 9 -->
+                <article class="dossier-item reveal" data-article="ARTÍCULO 277">
+                    <div class="law-text">
+                        <h3>Licuación de Sentencias</h3>
+                        <blockquote>
+                            "Las sentencias judiciales condenatorias de personas humanas y/o jurídicas cuando se trate
+                            de grandes empresas <mark>podrán ser canceladas en hasta un máximo de seis (6) cuotas</mark>
+                            mensuales consecutivas... En el caso de las Micro, Pequeñas y Medianas Empresas... en hasta
+                            un máximo de <mark>doce (12) cuotas</mark> mensuales consecutivas."
+                        </blockquote>
+                    </div>
+                    <div class="impact-text">
+                        <span class="impact-badge">Impacto Directo</span>
+                        <p><strong>El trabajador financia a la empresa infractora.</strong> Si un trabajador es
+                            despedido injustamente, no está registrado, hace un juicio y, después de años, lo gana; la
+                            empresa tiene el beneficio legal de pagarle la condena en cuotas (hasta en un año si es
+                            PYME). El trabajador asume todo el riesgo inflacionario y financiero, mientras la empresa
+                            licúa su deuda.</p>
+                    </div>
+                </article>
+
+                <!-- ITEM 10 -->
+                <article class="dossier-item reveal" data-article="LEY 23.551 ART 20 TER">
+                    <div class="law-text">
+                        <h3>Criminalización de la Protesta</h3>
+                        <blockquote>
+                            "Serán consideradas <mark>infracciones muy graves</mark>... Provocar, y/o instar y/u
+                            organizar el bloqueo o tomar un establecimiento; impedir u obstruir total o parcialmente el
+                            ingreso o egreso de personas y/o cosas... la entidad responsable será pasible de la
+                            aplicación de sanciones... "
+                        </blockquote>
+                    </div>
+                    <div class="impact-text">
+                        <span class="impact-badge">Impacto Directo</span>
+                        <p><strong>Bloqueo a las asambleas y movilizaciones en fábrica.</strong> Cualquier medida de
+                            fuerza que implique piquetes, bloqueos o toma pacífica de establecimientos es categorizada
+                            como gravísima, habilitando el despido justificado y abriendo la puerta a embargos y multas
+                            devastadoras contra los sindicatos, desincentivando la movilización obrera.</p>
+                    </div>
+                </article>
+
+                <!-- ITEM 11 -->
+                <article class="dossier-item reveal" data-article="ARTÍCULO 2">
+                    <div class="law-text">
+                        <h3>Exclusión de Protección</h3>
+                        <blockquote>
+                            "Las disposiciones de esta ley no serán aplicables... d. A las contrataciones de obra,
+                            servicios, agencia... e. A los trabajadores independientes y sus colaboradores... f. A los
+                            prestadores independientes de plataformas tecnológicas..."
+                        </blockquote>
+                    </div>
+                    <div class="impact-text">
+                        <span class="impact-badge">Impacto Directo</span>
+                        <p><strong>Desplazamiento del derecho laboral.</strong> Deja fuera de los convenios colectivos y
+                            de la Ley de Contrato de Trabajo a repartidores de apps, conductores y falsos autónomos,
+                            institucionalizando la precarización y negándoles cualquier tipo de derecho laboral
+                            histórico.</p>
+                    </div>
+                </article>
+
+                <!-- ITEM 12 -->
+                <article class="dossier-item reveal" data-article="ARTÍCULO 18">
+                    <div class="law-text">
+                        <h3>Borrado de Antigüedad</h3>
+                        <blockquote>
+                            "Si transcurriese un plazo de dos (2) años entre el cese del vínculo laboral, cualquiera
+                            fuera la causa, y el trabajador reingresara a prestar servicios con el mismo empleador,
+                            <mark>la antigüedad del tiempo de servicio anterior no será computada.</mark>"
+                        </blockquote>
+                    </div>
+                    <div class="impact-text">
+                        <span class="impact-badge">Impacto Directo</span>
+                        <p><strong>Pérdida de derechos históricos.</strong> Si un trabajador renuncia o es despedido y
+                            vuelve a la misma empresa después de dos años, entra como un empleado completamente nuevo.
+                            Pierde los años acumulados para el cálculo de vacaciones, indemnizaciones o premios por
+                            antigüedad.</p>
+                    </div>
+                </article>
+
+                <!-- ITEM 13 -->
+                <article class="dossier-item reveal" data-article="ARTÍCULO 133">
+                    <div class="law-text">
+                        <h3>Asfixia Financiera Sindical</h3>
+                        <blockquote>
+                            "En ningún caso podrán efectuarse las deducciones... sin el consentimiento expreso del
+                            trabajador... teniendo en cuenta el <mark>tope del dos por ciento (2%)</mark> establecido...
+                            siempre que sean con destino al o los sindicatos..."
+                        </blockquote>
+                    </div>
+                    <div class="impact-text">
+                        <span class="impact-badge">Impacto Directo</span>
+                        <p><strong>Debilitamiento de la organización obrera.</strong> Al limitar al 2% y exigir
+                            consentimiento burocrático constante para las cuotas solidarias, se busca desfinanciar a los
+                            sindicatos, reduciendo su capacidad de fuego para huelgas, asesoramiento legal y
+                            sostenimiento de obras sociales, debilitando la paritaria colectiva.</p>
+                    </div>
+                </article>
+
+                <!-- ITEM 14 -->
+                <article class="dossier-item reveal" data-article="ARTÍCULO 248">
+                    <div class="law-text">
+                        <h3>Indemnización por Muerte</h3>
+                        <blockquote>
+                            "En caso de muerte del trabajador... el empleador queda liberado del pago si cancela la
+                            misma dentro de los treinta (30) días... Si algún acreedor con mejor derecho reclama...
+                            <mark>sólo tendrá una acción de repetición contra los otros acreedores quedando eximido el
+                                empleador de toda obligación.</mark>"
+                        </blockquote>
+                    </div>
+                    <div class="impact-text">
+                        <span class="impact-badge">Impacto Directo</span>
+                        <p><strong>Desprotección a la familia del fallecido.</strong> El empleador paga rápido y se
+                            desliga ("queda eximido de toda obligación"). Si le pagó a un familiar pero había otro con
+                            mejor derecho (ej. un hijo no reconocido o cónyuge separado), el familiar perjudicado no
+                            puede reclamarle a la empresa, sino que debe iniciar un juicio eterno contra su propio
+                            familiar.</p>
+                    </div>
+                </article>
+
+                <!-- ITEM 15 -->
+                <article class="dossier-item reveal" data-article="LEY 26.844 ART 7">
+                    <div class="law-text">
+                        <h3>Casas Particulares</h3>
+                        <blockquote>
+                            "El contrato de trabajo por tiempo indeterminado se entenderá celebrado a prueba
+                            <mark>durante los primeros seis (6) meses de vigencia</mark>. Cualquiera de las partes podrá
+                            extinguir la relación durante ese lapso... <mark>sin generarse derecho a indemnización
+                                alguna</mark>..."
+                        </blockquote>
+                    </div>
+                    <div class="impact-text">
+                        <span class="impact-badge">Impacto Directo</span>
+                        <p><strong>Vulnerabilidad extendida en el hogar.</strong> Se duplica el período de prueba para
+                            empleadas domésticas y cuidadores a 6 meses. Durante medio año, el empleado puede ser
+                            despedido sin causa y sin cobrar un solo peso de indemnización, fomentando la rotación
+                            constante y la inestabilidad en uno de los sectores más vulnerables.</p>
+                    </div>
+                </article>
+
+                <!-- ITEM 16 -->
+                <article class="dossier-item reveal" data-article="LEY 26.727 ART 16">
+                    <div class="law-text">
+                        <h3>Trabajo Agrario</h3>
+                        <blockquote>
+                            "Para los trabajadores de esta modalidad, <mark>el período de prueba será de ocho (8)
+                                meses.</mark>"
+                        </blockquote>
+                    </div>
+                    <div class="impact-text">
+                        <span class="impact-badge">Impacto Directo</span>
+                        <p><strong>Precarización rural brutal.</strong> El peón rural estará a prueba durante 8 meses.
+                            Considerando las temporadas de cosecha, permite a los latifundistas y empresas agropecuarias
+                            usar mano de obra intensiva durante toda la campaña y despedirlos justo antes de que se
+                            cumplan los 8 meses, evitando cualquier pago indemnizatorio.</p>
+                    </div>
+                </article>
+
+                <!-- ITEM 17 -->
+                <article class="dossier-item reveal" data-article="PLATAFORMAS">
+                    <div class="law-text">
+                        <h3>Trabajadores de Apps</h3>
+                        <blockquote>
+                            "...asegurando la <mark>independencia</mark> de quienes ofrecen o prestan a través de dichas
+                            plataformas, los servicios de movilidad de personas y/o reparto... <mark>prestador
+                                independiente</mark>..."
+                        </blockquote>
+                    </div>
+                    <div class="impact-text">
+                        <span class="impact-badge">Impacto Directo</span>
+                        <p><strong>Legalización del modelo de esclavitud digital.</strong> Consagra por ley que los
+                            repartidores de Rappi, PedidosYa o choferes de Uber no tienen relación de dependencia. No
+                            hay salario mínimo, horas extras, ART, ni protecciones; asumen todos los costos operativos
+                            (bici, moto, celular) mientras la plataforma extrae la ganancia neta libre de contingencias.
+                        </p>
+                    </div>
+                </article>
+
+            </div>
+
+            <div class="load-more-container">
+                <button id="loadMoreBtn" class="brutalist-btn">Desclasificar Archivos Restantes</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="conclusion reveal">
+        <div class="container">
+            <h2>Transformar derechos en costos de transacción</h2>
+            <p>
+                El análisis del Boletín Oficial N° 339128 confirma que bajo el paradigma de la competitividad y
+                certidumbre legal para las empresas, se ha configurado un escenario sistémico de intermitencia vital,
+                menor previsibilidad económica y nula estabilidad jurídica para la clase trabajadora.
+            </p>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>ANÁLISIS DOCUMENTAL PRIVADO — CÓDIGO DE EXPEDIENTE: B.O. 339128. EL IMPACTO SOCIAL DE LA NORMATIVA.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Intersection Observer for Brutalist Reveals
+        document.addEventListener("DOMContentLoaded", () => {
+            const observer = new IntersectionObserver((entries, obs) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        obs.unobserve(entry.target);
+                    }
+                });
+            }, {
+                root: null,
+                rootMargin: '0px 0px -50px 0px',
+                threshold: 0.1
+            });
+
+            const reveals = document.querySelectorAll('.reveal');
+            reveals.forEach(el => observer.observe(el));
+
+            // Load More Logic
+            const grid = document.querySelector('.dossier-grid');
+            const btn = document.getElementById('loadMoreBtn');
+
+            // Start collapsed
+            grid.classList.add('collapsed');
+
+            btn.addEventListener('click', () => {
+                grid.classList.remove('collapsed');
+                btn.style.display = 'none';
+
+                // Re-trigger observer for newly revealed items
+                const hiddenReveals = document.querySelectorAll('.dossier-item:nth-child(n+5)');
+                hiddenReveals.forEach(el => {
+                    el.classList.remove('active');
+                    observer.observe(el);
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
